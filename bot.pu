@@ -1,0 +1,26 @@
+from telegram import Update, ReplyKeyboardMarkup
+from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters, ContextTypes
+
+API_TOKEN = '7708877885:AAGrUWXUIzMb3bgzTAs2UdqoBsnOzuaxT9g'
+
+start_buttons = [['я не гей'], ['я гей'], ['я транс']]
+answer_buttons = [['да'], ['нет']]
+
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    markup = ReplyKeyboardMarkup(start_buttons, resize_keyboard=True)
+    await update.message.reply_text("Выбери:", reply_markup=markup)
+
+async def handle_first_choice(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    markup = ReplyKeyboardMarkup(answer_buttons, resize_keyboard=True)
+    await update.message.reply_text("я знаю, что ты любишь состать пенисы", reply_markup=markup)
+
+async def handle_second_choice(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("сосун")
+
+app = ApplicationBuilder().token(API_TOKEN).build()
+app.add_handler(CommandHandler("start", start))
+app.add_handler(MessageHandler(filters.Regex("^(я не гей|я гей|я транс)$"), handle_first_choice))
+app.add_handler(MessageHandler(filters.Regex("^(да|нет)$"), handle_second_choice))
+
+if __name__ == '__main__':
+    app.run_polling()
